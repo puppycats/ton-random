@@ -6,8 +6,8 @@ Generating random numbers on-chain is a common task for many different projects.
 
 This repository contain two contracts that will help you in generating random numbers on-chain.
 
- * `main.fc` — contract that accepts queries (check `contract/scheme.tlb`) and responding with generated random numbers.
- * `skip.fc` — contract that must be deployed in Masterchain (or some other workchain, different from the one where `main.fc` is deployed). It is just a basic echo contract which sends back the same message. It is used to skip at least 1 block and guarantee that random is unpredictable.
+ * `main.fc` — contract that accepts queries (check `contract/scheme.tlb`) and responds with random numbers.
+ * `skip.fc` — contract that must be deployed in Masterchain (or some other workchain, different from the one where `main.fc` is deployed). It is just a basic echo contract. It is used to skip at least 1 block and guarantee that random is unpredictable.
 
 ## Sources
 
