@@ -64,6 +64,36 @@ const getBalance = async (system, contract) => {
     return (await system.provider(contract).getState()).balance
 }
 
+const parseResponse = (response) => {
+    let s = response.beginParse()
+    const op = s.loadUint(32)
+    const result = s.loadUint(256)
+    const body = s.loadRef()
+    expect(op).to.be.equal(0xf8bb96e8)
+    return { result, body }
+}
+
+const generateNumber = async (system, wallet, contract, value, body) => {
+    await wallet.send({
+        sendMode: 0,
+        to: contract.address,
+        value: toNano(value),
+        body: beginCell().storeUint(0x630dd32b, 32).storeSlice(body).endCell(),
+        bounce: true
+    })
+
+    let txs = await system.run()
+    expect(txs).to.have.lengthOf(5)
+    const resTx = txs[4].inMessage
+    expect(resTx.info.src.toRawString()).to.be.equal(contract.address.toRawString())
+    expect(resTx.info.dest.toRawString()).to.be.equal(wallet.address.toRawString())
+    expect(parseInt(toNano(value) - resTx.info.value.coins)).to.be.lte(100000000)
+    const res = parseResponse(resTx.body)
+    expect(res.body.hash().toString()).to.be.equal(beginCell().storeSlice(body).endCell().hash().toString())
+
+    return res.result
+}
+
 describe('TON Random', () => {
     var system, skip, main, treasure
 
@@ -74,16 +104,9 @@ describe('TON Random', () => {
         main = await createMainSC(system, treasure)
     })
 
-    it('should generate number successfully', async () => {
-        await treasure.send({
-            sendMode: 0,
-            to: skip.address,
-            value: toNano(123),
-            body: beginCell().storeUint(0x630dd32b, 32).storeUint(123, 10).endCell(),
-            bounce: true
-        })
-
-        let txs = await system.run()
-        console.log(txs)
+    it('should generate numbers successfully', async () => {
+        for (let i = 0; i < 10; i += 1) {
+            await generateNumber(system, treasure, main, 1, beginCell().endCell().beginParse())
+        }
     })
 })

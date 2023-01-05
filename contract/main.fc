@@ -28,7 +28,7 @@ int slices_equal? (slice a, slice b) asm "SDEQ";
     }
     elseif (op == op::generate_response()) {
         throw_unless(701, slices_equal?(sender, skip_address));
-        int result = 123;
+        randomize_lt();
         send_raw_message(
             begin_cell()
                 .store_uint(0x18, 6)
@@ -36,7 +36,7 @@ int slices_equal? (slice a, slice b) asm "SDEQ";
                 .store_coins(0)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
                 .store_uint(op::generate_response(), 32)
-                .store_uint(123, 256)
+                .store_uint(random(), 256)
                 .store_ref(in_msg_body~load_ref())
             .end_cell(),
             64
