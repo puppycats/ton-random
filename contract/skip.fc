@@ -1,0 +1,18 @@
+() recv_internal (cell in_msg_full, slice in_msg_body) impure {
+    var cs = in_msg_full.begin_parse();
+    var flags = cs~load_uint(4);
+    if (flags & 1) {
+        return ();
+    }
+    slice sender = cs~load_msg_addr();
+    send_raw_message(
+        begin_cell()
+            .store_uint(0x18, 6)
+            .store_slice(sender)
+            .store_coins(0)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .store_slice(in_msg_body)
+        .end_cell(),
+        64
+    );
+}

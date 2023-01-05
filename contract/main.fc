@@ -1,0 +1,43 @@
+const slice skip_address = "Ef_6qXFtLoysQ-REfjEZwrkKzu46h0zALb_4Y2-401EzTyvS"a;
+
+int slices_equal? (slice a, slice b) asm "SDEQ";
+
+() recv_internal (int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    var cs = in_msg_full.begin_parse();
+    var flags = cs~load_uint(4);
+    if (flags & 1) {
+        return ();
+    }
+    
+    slice sender = cs~load_msg_addr();
+    int op = in_msg_body~load_uint(32);
+
+    if (op == 0) {
+        send_raw_message(
+            begin_cell()
+                .store_uint(0x18, 6)
+                .store_slice(skip_address)
+                .store_coins(0)
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+                .store_uint(1, 32)
+                .store_slice(sender)
+                .store_ref(begin_cell().store_slice(in_msg_body).end_cell())
+            .end_cell(),
+            64
+        );
+    }
+    elseif (op == 1) {
+        throw_unless(701, slices_equal?(sender, skip_address));
+        send_raw_message(
+            begin_cell()
+                .store_uint(0x18, 6)
+                .store_slice(in_msg_body~load_msg_addr())
+                .store_coins(0)
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+                .store_uint(0, 32)
+                .store_slice(in_msg_body~load_ref().begin_parse())
+            .end_cell(),
+            64
+        );
+    }
+}
