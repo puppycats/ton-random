@@ -35,7 +35,6 @@ const createMainSC = async (system, treasure) => {
 const createSkipSC = async (system, treasure) => {
     const targets = {
         'stdlib.fc': 'contract/stdlib.fc',
-        'opcodes.fc': 'contract/opcodes.fc',
         'skip.fc': 'contract/skip.fc'
     }
     const compilationResult = await compileFunc({

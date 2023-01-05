@@ -1,4 +1,4 @@
-const slice skip_address = "Ef_6qXFtLoysQ-REfjEZwrkKzu46h0zALb_4Y2-401EzTyvS"a;
+const slice skip_address = "Ef-qj8_G2KbB7tP-0moAvD38axjALxVCqc73YNpGZH7Uh7aG"a;
 
 int slices_equal? (slice a, slice b) asm "SDEQ";
 
