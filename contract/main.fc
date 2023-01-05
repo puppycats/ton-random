@@ -1,4 +1,5 @@
-const slice skip_address = "Ef-qj8_G2KbB7tP-0moAvD38axjALxVCqc73YNpGZH7Uh7aG"a;
+const slice skip_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
+const int min_balance = 1000000000;
 
 int slices_equal? (slice a, slice b) asm "SDEQ";
 
@@ -17,13 +18,13 @@ int slices_equal? (slice a, slice b) asm "SDEQ";
             begin_cell()
                 .store_uint(0x18, 6)
                 .store_slice(skip_address)
-                .store_coins(0)
+                .store_coins(my_balance - min_balance)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
                 .store_uint(op::generate_response(), 32)
                 .store_slice(sender)
                 .store_ref(begin_cell().store_slice(in_msg_body).end_cell())
             .end_cell(),
-            64
+            2
         );
     }
     elseif (op == op::generate_response()) {
@@ -33,13 +34,13 @@ int slices_equal? (slice a, slice b) asm "SDEQ";
             begin_cell()
                 .store_uint(0x18, 6)
                 .store_slice(in_msg_body~load_msg_addr())
-                .store_coins(0)
+                .store_coins(my_balance - min_balance)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
                 .store_uint(op::generate_response(), 32)
                 .store_uint(random(), 256)
                 .store_ref(in_msg_body~load_ref())
             .end_cell(),
-            64
+            2
         );
     }
 }

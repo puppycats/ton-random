@@ -17,10 +17,10 @@ This repository contain two contracts that will help you in generating random nu
 ## Usage
 
 `contract/skip.fc` contract is deployed in Masterchain (wc -1) at address:
- * `Ef-qj8_G2KbB7tP-0moAvD38axjALxVCqc73YNpGZH7Uh7aG`
+ * `Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s`
 
 `contract/main.fc` contract is deployed in Basechain (wc 0) at address:
- * `EQCvDqsdX4_WHsN352c29vgWz45y8OqC1pkz8S0cbMiG1Q7s`
+ * `EQB_tX9bf-CwCtfan3LaRik_K2MH0J60XRZtd0p_x3d6lW96`
 
 To generate random number, simply send a query internal message to the `main` contract and handle response internal message.
 Check `contract/scheme.tlb` for exact scheme.
