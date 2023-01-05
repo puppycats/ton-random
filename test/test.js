@@ -7,6 +7,7 @@ import { should } from 'chai'
 const createMainSC = async (system) => {
     const targets = {
         'stdlib.fc': 'contract/stdlib.fc',
+        'opcodes.fc': 'contract/opcodes.fc',
         'main.fc': 'contract/main.fc'
     }
     const compilationResult = await compileFunc({
@@ -24,6 +25,7 @@ const createMainSC = async (system) => {
 const createSkipSC = async (system) => {
     const targets = {
         'stdlib.fc': 'contract/stdlib.fc',
+        'opcodes.fc': 'contract/opcodes.fc',
         'skip.fc': 'contract/skip.fc'
     }
     const compilationResult = await compileFunc({

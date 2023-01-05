@@ -12,30 +12,32 @@ int slices_equal? (slice a, slice b) asm "SDEQ";
     slice sender = cs~load_msg_addr();
     int op = in_msg_body~load_uint(32);
 
-    if (op == 0) {
+    if (op == op::generate()) {
         send_raw_message(
             begin_cell()
                 .store_uint(0x18, 6)
                 .store_slice(skip_address)
                 .store_coins(0)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-                .store_uint(1, 32)
+                .store_uint(op::generate_response(), 32)
                 .store_slice(sender)
                 .store_ref(begin_cell().store_slice(in_msg_body).end_cell())
             .end_cell(),
             64
         );
     }
-    elseif (op == 1) {
+    elseif (op == op::generate_response()) {
         throw_unless(701, slices_equal?(sender, skip_address));
+        int result = 123;
         send_raw_message(
             begin_cell()
                 .store_uint(0x18, 6)
                 .store_slice(in_msg_body~load_msg_addr())
                 .store_coins(0)
                 .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-                .store_uint(0, 32)
-                .store_slice(in_msg_body~load_ref().begin_parse())
+                .store_uint(op::generate_response(), 32)
+                .store_uint(123, 256)
+                .store_ref(in_msg_body~load_ref())
             .end_cell(),
             64
         );

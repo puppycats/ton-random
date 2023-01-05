@@ -1,0 +1,2 @@
+int op::generate () asm "0x630dd32b INT";
+int op::generate_response () asm "0xf8bb96e8 INT";

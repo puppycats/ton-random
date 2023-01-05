@@ -1,0 +1,2 @@
+generate#630dd32b body:Any = InternalMsgBody;
+generate_response#f8bb96e8 result:uint256 body:^Any = InternalMsgBody;
